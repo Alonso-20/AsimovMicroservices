@@ -1,0 +1,1 @@
+INSERT INTO directors (id, first_name, age, email, password, phone) VALUES (1, 'Antony', 15, 'antony@gmail.com', 'password', '99852535')
