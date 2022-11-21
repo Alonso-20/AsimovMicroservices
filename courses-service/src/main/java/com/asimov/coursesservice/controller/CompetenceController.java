@@ -31,7 +31,7 @@ public class CompetenceController {
     }
 
     @PutMapping("{competenceId}")
-    public Competence updateCompetence(@PathVariable("competenceId") Long competenceId, Competence competence) {
+    public Competence updateCompetence(@PathVariable("competenceId") Long competenceId,@Valid @RequestBody Competence competence) {
         return competenceService.updateCompetence(competenceId, competence);
     }
 

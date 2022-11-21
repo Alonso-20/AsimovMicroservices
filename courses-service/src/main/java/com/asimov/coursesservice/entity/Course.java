@@ -1,10 +1,8 @@
 package com.asimov.coursesservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -34,6 +32,7 @@ public class Course {
     @JoinTable(name = "course_competences",
             joinColumns = {@JoinColumn(name = "course_id")},
             inverseJoinColumns = {@JoinColumn(name = "competence_id")})
+    @JsonManagedReference
     private List<Competence> competences;
 
     @Valid

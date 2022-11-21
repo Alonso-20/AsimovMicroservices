@@ -33,7 +33,7 @@ public class CourseController {
 
 
     @PutMapping("{courseId}")
-    public Course updateCourse(@PathVariable("courseId") Long courseId,Course course) {
+    public Course updateCourse(@PathVariable("courseId") Long courseId,@Valid @RequestBody Course course) {
         return courseService.updateCourse(courseId,course);
     }
 
@@ -44,13 +44,13 @@ public class CourseController {
 
     @PostMapping("{courseId}/competences/{competenceId}")
     public Course assignCompetence(@PathVariable Long courseId, @PathVariable Long competenceId){
-        return courseService.assignCourseCompetence(competenceId,competenceId);
+        return courseService.assignCourseCompetence(courseId,competenceId);
     }
 
 
     @DeleteMapping("{courseId}/competences/{competenceId}")
     public Course unassignCompetence(@PathVariable Long courseId, @PathVariable Long competenceId){
-        return courseService.unassignCourseCompetence(competenceId,competenceId);
+        return courseService.unassignCourseCompetence(courseId,competenceId);
     }
 
 }

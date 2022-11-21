@@ -1,5 +1,6 @@
 package com.asimov.coursesservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,5 +26,6 @@ public class Competence {
     private String description;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "competences")
+    @JsonBackReference
     private List<Course> courses;
 }
