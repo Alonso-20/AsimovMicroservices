@@ -1,6 +1,7 @@
 package com.asimov.directorservice.entity;
 
 import com.asimov.directorservice.model.Announcement;
+import com.asimov.directorservice.model.Teacher;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -40,4 +41,7 @@ public class Director {
 
     @Transient
     List<Announcement> announcements;
+
+    @Transient
+    List<Teacher> teachers;
 }

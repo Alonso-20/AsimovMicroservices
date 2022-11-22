@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface TeacherService {
     List<Teacher> getAllTeachers();
+    List<Teacher> getTeachersByDirectorId(Long directorId);
     Teacher getTeacherById(Long teacherId);
     Teacher createTeacher(Teacher teacher);
     Teacher updateTeacher(Long teacherId, Teacher teacherResponse);

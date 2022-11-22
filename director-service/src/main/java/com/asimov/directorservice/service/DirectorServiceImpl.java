@@ -1,9 +1,11 @@
 package com.asimov.directorservice.service;
 
 import com.asimov.directorservice.client.AnnouncementClient;
+import com.asimov.directorservice.client.TeacherClient;
 import com.asimov.directorservice.entity.Director;
 import com.asimov.directorservice.exception.ResourceNotFoundException;
 import com.asimov.directorservice.model.Announcement;
+import com.asimov.directorservice.model.Teacher;
 import com.asimov.directorservice.repository.DirectorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +23,18 @@ public class DirectorServiceImpl implements DirectorService{
     @Autowired
     private AnnouncementClient announcementClient;
 
+    @Autowired
+    private TeacherClient teacherClient;
+
     @Override
     public List<Director> getAll() {
 
         List<Director> directors = directorRepository.findAll().stream().map(director -> {
             List<Announcement> announcements = announcementClient.getAnnouncementByDirectorsId(director.getId());
             director.setAnnouncements(announcements);
+
+            List<Teacher> teachers = teacherClient.getTeachersByDirectorId(director.getId());
+            director.setTeachers(teachers);
             return director;
         }).collect(Collectors.toList());
 
@@ -40,6 +48,9 @@ public class DirectorServiceImpl implements DirectorService{
         if(directorRepository.existsById(directorId)){
             List<Announcement> announcements = announcementClient.getAnnouncementByDirectorsId(director.getId());
             director.setAnnouncements(announcements);
+
+            List<Teacher> teachers = teacherClient.getTeachersByDirectorId(director.getId());
+            director.setTeachers(teachers);
         }
 
         return director;

@@ -20,6 +20,11 @@ public class TeacherController {
         return teacherService.getAllTeachers();
     }
 
+    @GetMapping("directors/{directorId}")
+    public List<Teacher> getTeachersByDirectorId(@PathVariable Long directorId){
+        return teacherService.getTeachersByDirectorId(directorId);
+    }
+
     @GetMapping("{teacherId}")
     public Teacher getTeacherById(@PathVariable("teacherId") Long teacherId){
         return teacherService.getTeacherById(teacherId);
