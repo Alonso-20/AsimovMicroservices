@@ -1,1 +1,1 @@
-INSERT INTO teachers(id, point, first_name, last_name, age, password, phone, teacher_id) VALUES (1, 2, 'Pedro', 'Jonas', 17, 'password', '999999999', 1)
+INSERT INTO teachers(id, point, first_name, last_name, age, password, phone, director_id) VALUES (1, 2, 'Pedro', 'Jonas', 17, 'password', '999999999', 1)

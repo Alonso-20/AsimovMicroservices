@@ -40,7 +40,6 @@ public class TeacherServiceImpl implements TeacherService{
                     teacher.setLast_name(teacherResponse.getLast_name());
                     teacher.setPoint(teacherResponse.getPoint());
                     teacher.setAge(teacherResponse.getAge());
-                    teacher.setTeacherId(teacherResponse.getTeacherId());
                     teacher.setPassword(teacherResponse.getPassword());
                     teacher.setPhone(teacherResponse.getPhone());
                     return teacherRepository.save(teacher);

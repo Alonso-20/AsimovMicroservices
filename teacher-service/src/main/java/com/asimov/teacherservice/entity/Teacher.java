@@ -34,6 +34,6 @@ public class Teacher {
 
     private String phone;
 
-    @Column(name = "teacher_id")
-    private Long teacherId;
+    @Column(name = "director_id")
+    private Long directorId;
 }
