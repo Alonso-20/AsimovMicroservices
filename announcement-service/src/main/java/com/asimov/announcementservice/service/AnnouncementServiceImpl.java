@@ -1,13 +1,16 @@
 package com.asimov.announcementservice.service;
 
+import com.asimov.announcementservice.client.DirectorClient;
 import com.asimov.announcementservice.entity.Announcement;
 import com.asimov.announcementservice.exception.ResourceNotFoundException;
+import com.asimov.announcementservice.model.Director;
 import com.asimov.announcementservice.repository.AnnouncementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AnnouncementServiceImpl implements AnnouncementService {
@@ -15,14 +18,29 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     @Autowired
     private AnnouncementRepository announcementRepository;
 
+    @Autowired
+    private DirectorClient directorClient;
+
     @Override
     public List<Announcement> getAllAnnouncement() {
-        return announcementRepository.findAll();
+        List<Announcement> announcements = announcementRepository.findAll().stream().map(announcement -> {
+            Director director = directorClient.getDirectorById(announcement.getDirectorId());
+            announcement.setDirector(director);
+            return announcement;
+        }).collect(Collectors.toList());
+
+        return announcements;
     }
 
     @Override
     public Announcement getAnnouncementById(Long announcementId) {
-        return announcementRepository.findById(announcementId).orElseThrow(()->new ResourceNotFoundException("Id", announcementId));
+        Announcement announcement =announcementRepository.findById(announcementId).orElseThrow(()->new ResourceNotFoundException("Id", announcementId));
+        if(announcementRepository.existsById(announcementId)){
+            Director director = directorClient.getDirectorById(announcement.getDirectorId());
+            announcement.setDirector(director);
+        }
+
+        return announcement;
     }
 
     @Override
@@ -45,5 +63,10 @@ public class AnnouncementServiceImpl implements AnnouncementService {
             announcementRepository.delete(announcement);
             return ResponseEntity.ok().build();
         }).orElseThrow(()->new ResourceNotFoundException("Id", announcementId));
+    }
+
+    @Override
+    public List<Announcement> getAllAnnouncementByDirectorId(Long directorId) {
+        return announcementRepository.findByDirectorId(directorId);
     }
 }

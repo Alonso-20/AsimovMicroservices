@@ -1,13 +1,16 @@
 package com.asimov.directorservice.service;
 
+import com.asimov.directorservice.client.AnnouncementClient;
 import com.asimov.directorservice.entity.Director;
 import com.asimov.directorservice.exception.ResourceNotFoundException;
+import com.asimov.directorservice.model.Announcement;
 import com.asimov.directorservice.repository.DirectorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DirectorServiceImpl implements DirectorService{
@@ -15,14 +18,31 @@ public class DirectorServiceImpl implements DirectorService{
     @Autowired
     private DirectorRepository directorRepository;
 
+    @Autowired
+    private AnnouncementClient announcementClient;
+
     @Override
     public List<Director> getAll() {
-        return directorRepository.findAll();
+
+        List<Director> directors = directorRepository.findAll().stream().map(director -> {
+            List<Announcement> announcements = announcementClient.getAnnouncementByDirectorsId(director.getId());
+            director.setAnnouncements(announcements);
+            return director;
+        }).collect(Collectors.toList());
+
+        return directors;
     }
 
     @Override
     public Director getByDirectorId(Long directorId) {
-        return directorRepository.findById(directorId).orElseThrow(()-> new ResourceNotFoundException("Director", directorId));
+
+        Director director = directorRepository.findById(directorId).orElseThrow(()-> new ResourceNotFoundException("Director", directorId));
+        if(directorRepository.existsById(directorId)){
+            List<Announcement> announcements = announcementClient.getAnnouncementByDirectorsId(director.getId());
+            director.setAnnouncements(announcements);
+        }
+
+        return director;
     }
 
     @Override

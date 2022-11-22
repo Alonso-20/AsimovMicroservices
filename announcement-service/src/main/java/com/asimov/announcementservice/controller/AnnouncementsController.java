@@ -26,6 +26,11 @@ public class AnnouncementsController {
         return announcementService.getAnnouncementById(announcementId);
     }
 
+    @GetMapping("directors/{directorId}")
+    public List<Announcement> getAnnouncementByDirectorsId(@PathVariable Long directorId){
+        return announcementService.getAllAnnouncementByDirectorId(directorId);
+    }
+
     @PostMapping
     public Announcement createAnnouncement(@Valid @RequestBody Announcement announcement){
         return announcementService.createAnnouncement(announcement);

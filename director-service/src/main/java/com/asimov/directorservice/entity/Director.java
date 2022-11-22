@@ -1,5 +1,6 @@
 package com.asimov.directorservice.entity;
 
+import com.asimov.directorservice.model.Announcement;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 @Table(name = "directors")
@@ -23,7 +25,6 @@ public class Director {
     @NotEmpty
     private String first_name;
 
-
     private int age;
 
     @NotBlank
@@ -36,4 +37,7 @@ public class Director {
 
     @NotNull
     private String phone;
+
+    @Transient
+    List<Announcement> announcements;
 }

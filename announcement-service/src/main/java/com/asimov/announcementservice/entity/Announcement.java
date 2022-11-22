@@ -1,5 +1,6 @@
 package com.asimov.announcementservice.entity;
 
+import com.asimov.announcementservice.model.Director;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,5 +27,8 @@ public class Announcement {
     @NotNull
     @Column(name = "director_id")
     private Long directorId;
+
+    @Transient
+    private Director director;
 
 }
