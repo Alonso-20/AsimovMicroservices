@@ -1,5 +1,6 @@
 package com.asimov.teacherservice.entity;
 
+import com.asimov.teacherservice.model.Director;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -36,4 +37,7 @@ public class Teacher {
 
     @Column(name = "director_id")
     private Long directorId;
+
+    @Transient
+    private Director director;
 }

@@ -1,13 +1,16 @@
 package com.asimov.teacherservice.service;
 
+import com.asimov.teacherservice.client.DirectorClient;
 import com.asimov.teacherservice.entity.Teacher;
 import com.asimov.teacherservice.exception.ResourceNotFoundException;
+import com.asimov.teacherservice.model.Director;
 import com.asimov.teacherservice.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TeacherServiceImpl implements TeacherService{
@@ -15,16 +18,29 @@ public class TeacherServiceImpl implements TeacherService{
     @Autowired
     private TeacherRepository teacherRepository;
 
+    @Autowired
+    private DirectorClient directorClient;
+
     @Override
     public List<Teacher> getAllTeachers() {
-        return teacherRepository.findAll();
+
+        List<Teacher> teachers = teacherRepository.findAll().stream().map(teacher -> {
+            Director director = directorClient.getDirectorById(teacher.getDirectorId());
+            teacher.setDirector(director);
+            return teacher;
+        }).collect(Collectors.toList());
+
+        return teachers;
     }
 
     @Override
     public Teacher getTeacherById(Long teacherId) {
-        return teacherRepository.findById(teacherId).orElseThrow(
-                ()-> new ResourceNotFoundException("Id", teacherId)
-        );
+        Teacher teacher = teacherRepository.findById(teacherId).orElseThrow(()-> new ResourceNotFoundException("Id", teacherId));
+        if(teacherRepository.existsById(teacherId)){
+            Director director = directorClient.getDirectorById(teacher.getDirectorId());
+            teacher.setDirector(director);
+        }
+        return teacher;
     }
 
     @Override
