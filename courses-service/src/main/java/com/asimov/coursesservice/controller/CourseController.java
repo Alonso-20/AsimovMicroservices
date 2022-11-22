@@ -26,6 +26,11 @@ public class CourseController {
         return courseService.getCourseById(courseId);
     }
 
+    @GetMapping("teacher/{teacherId}")
+    public List<Course> getAllCoursesByTeacherId(@PathVariable Long teacherId){
+        return courseService.getAllCoursesByTeacherId(teacherId);
+    }
+
     @PostMapping
     public Course createCourse(@Valid @RequestBody Course course){
         return courseService.createCourse(course);

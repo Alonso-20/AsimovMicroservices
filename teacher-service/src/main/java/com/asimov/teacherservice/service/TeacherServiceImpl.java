@@ -1,8 +1,10 @@
 package com.asimov.teacherservice.service;
 
+import com.asimov.teacherservice.client.CourseClient;
 import com.asimov.teacherservice.client.DirectorClient;
 import com.asimov.teacherservice.entity.Teacher;
 import com.asimov.teacherservice.exception.ResourceNotFoundException;
+import com.asimov.teacherservice.model.Course;
 import com.asimov.teacherservice.model.Director;
 import com.asimov.teacherservice.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +23,18 @@ public class TeacherServiceImpl implements TeacherService{
     @Autowired
     private DirectorClient directorClient;
 
+    @Autowired
+    private CourseClient courseClient;
+
     @Override
     public List<Teacher> getAllTeachers() {
 
         List<Teacher> teachers = teacherRepository.findAll().stream().map(teacher -> {
             Director director = directorClient.getDirectorById(teacher.getDirectorId());
             teacher.setDirector(director);
+
+            List<Course> courses = courseClient.getAllCoursesByTeacherId(teacher.getId());
+            teacher.setCourses(courses);
             return teacher;
         }).collect(Collectors.toList());
 
@@ -39,6 +47,9 @@ public class TeacherServiceImpl implements TeacherService{
         if(teacherRepository.existsById(teacherId)){
             Director director = directorClient.getDirectorById(teacher.getDirectorId());
             teacher.setDirector(director);
+
+            List<Course> courses = courseClient.getAllCoursesByTeacherId(teacher.getId());
+            teacher.setCourses(courses);
         }
         return teacher;
     }

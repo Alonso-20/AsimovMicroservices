@@ -1,8 +1,10 @@
 package com.asimov.coursesservice.service;
 
+import com.asimov.coursesservice.client.TeacherClient;
 import com.asimov.coursesservice.entity.Competence;
 import com.asimov.coursesservice.entity.Course;
 import com.asimov.coursesservice.exception.ResourceNotFoundException;
+import com.asimov.coursesservice.model.Teacher;
 import com.asimov.coursesservice.repository.CompetenceRepository;
 import com.asimov.coursesservice.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -20,14 +23,30 @@ public class CourseServiceImpl implements CourseService {
     @Autowired
     private CompetenceRepository competenceRepository;
 
+    @Autowired
+    private TeacherClient teacherClient;
+
     @Override
     public List<Course> getAllCourse() {
-        return courseRepository.findAll();
+        List<Course> courses = courseRepository.findAll().stream().map(course -> {
+            Teacher teacher = teacherClient.getTeacherById(course.getTeacherId());
+            course.setTeacher(teacher);
+            return course;
+        }).collect(Collectors.toList());
+
+        return courses;
     }
 
     @Override
     public Course getCourseById(Long courseId) {
-        return courseRepository.findById(courseId).orElseThrow(()-> new ResourceNotFoundException("Id", courseId));
+
+        Course course = courseRepository.findById(courseId).orElseThrow(()-> new ResourceNotFoundException("Id", courseId));
+        if(courseRepository.existsById(courseId)){
+            Teacher teacher = teacherClient.getTeacherById(course.getTeacherId());
+            course.setTeacher(teacher);
+        }
+
+        return course;
     }
 
     @Override
@@ -53,6 +72,11 @@ public class CourseServiceImpl implements CourseService {
             courseRepository.delete(course);
             return ResponseEntity.ok().build();
         }).orElseThrow(()-> new ResourceNotFoundException("Id", courseId));
+    }
+
+    @Override
+    public List<Course> getAllCoursesByTeacherId(Long teacherId) {
+        return courseRepository.findByTeacherId(teacherId);
     }
 
     @Override

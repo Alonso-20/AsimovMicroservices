@@ -1,5 +1,6 @@
 package com.asimov.teacherservice.entity;
 
+import com.asimov.teacherservice.model.Course;
 import com.asimov.teacherservice.model.Director;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor @AllArgsConstructor
@@ -40,4 +42,7 @@ public class Teacher {
 
     @Transient
     private Director director;
+
+    @Transient
+    private List<Course> courses;
 }

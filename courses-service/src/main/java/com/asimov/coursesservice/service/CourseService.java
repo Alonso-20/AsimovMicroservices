@@ -11,7 +11,7 @@ public interface CourseService {
     Course createCourse(Course course);
     Course updateCourse(Long courseId, Course courseResponse);
     ResponseEntity<?> deleteCourse(Long courseId);
-
+    List<Course> getAllCoursesByTeacherId(Long teacherId);
     Course assignCourseCompetence(Long courseId, Long competenceId);
     Course unassignCourseCompetence(Long courseId, Long competenceId);
 

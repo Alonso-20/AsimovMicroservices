@@ -1,5 +1,6 @@
 package com.asimov.coursesservice.entity;
 
+import com.asimov.coursesservice.model.Teacher;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
@@ -24,7 +25,7 @@ public class Course {
 
     @NotEmpty
     @Lob
-    private  String description;
+    private String description;
 
     private Boolean state;
 
@@ -36,11 +37,16 @@ public class Course {
     private List<Competence> competences;
 
     @Valid
-    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "course_id")
     private List<Item> items;
 
+    @Column(name = "teacher_id")
+    private Long teacherId;
+
+    @Transient
+    private Teacher teacher;
 
     public Course(){
         items = new ArrayList<>();
