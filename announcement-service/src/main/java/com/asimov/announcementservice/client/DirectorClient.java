@@ -6,9 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@FeignClient(name = "director-service")
-@RequestMapping("api/v1/directors")
+@FeignClient(name = "director-service",fallback = DirectorHystrixFallbackFactory.class)
 public interface DirectorClient {
-    @GetMapping("{directorId}")
+    @GetMapping("api/v1/directors/{directorId}")
     Director getDirectorById(@PathVariable("directorId") Long directorId);
 }
