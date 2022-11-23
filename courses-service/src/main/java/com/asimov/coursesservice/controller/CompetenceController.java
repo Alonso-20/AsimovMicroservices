@@ -1,6 +1,8 @@
 package com.asimov.coursesservice.controller;
 
 import com.asimov.coursesservice.entity.Competence;
+import com.asimov.coursesservice.resources.CompetenceDto;
+import com.asimov.coursesservice.resources.mapper.CompetenceDtoMapper;
 import com.asimov.coursesservice.service.CompetenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,12 @@ public class CompetenceController {
     @Autowired
     private CompetenceService competenceService;
 
+    private CompetenceDtoMapper competenceDtoMapper;
+
+    public CompetenceController(CompetenceDtoMapper competenceDtoMapper){
+        this.competenceDtoMapper = competenceDtoMapper;
+    }
+
     @GetMapping
     public List<Competence> getAllCompetences() {
         return competenceService.getAllCompetences();
@@ -26,13 +34,13 @@ public class CompetenceController {
     }
 
     @PostMapping
-    public Competence createCompetence(@Valid @RequestBody Competence competence) {
-        return competenceService.createCompetence(competence);
+    public Competence createCompetence(@Valid @RequestBody CompetenceDto competence) {
+        return competenceService.createCompetence(competenceDtoMapper.mapFrom(competence));
     }
 
     @PutMapping("{competenceId}")
-    public Competence updateCompetence(@PathVariable("competenceId") Long competenceId,@Valid @RequestBody Competence competence) {
-        return competenceService.updateCompetence(competenceId, competence);
+    public Competence updateCompetence(@PathVariable("competenceId") Long competenceId,@Valid @RequestBody CompetenceDto competence) {
+        return competenceService.updateCompetence(competenceId, competenceDtoMapper.mapFrom(competence));
     }
 
     @DeleteMapping("{competenceId}")

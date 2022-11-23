@@ -1,6 +1,8 @@
 package com.asimov.coursesservice.controller;
 
 import com.asimov.coursesservice.entity.Course;
+import com.asimov.coursesservice.resources.CourseDto;
+import com.asimov.coursesservice.resources.mapper.CourseDtoMapper;
 import com.asimov.coursesservice.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,12 @@ public class CourseController {
 
     @Autowired
     private CourseService courseService;
+
+    private CourseDtoMapper courseDtoMapper;
+
+    public CourseController(CourseDtoMapper courseDtoMapper){
+        this.courseDtoMapper = courseDtoMapper;
+    }
 
     @GetMapping
     public List<Course> getAllCourses(){
@@ -32,14 +40,14 @@ public class CourseController {
     }
 
     @PostMapping
-    public Course createCourse(@Valid @RequestBody Course course){
-        return courseService.createCourse(course);
+    public Course createCourse(@Valid @RequestBody CourseDto course){
+        return courseService.createCourse(courseDtoMapper.mapFrom(course));
     }
 
 
     @PutMapping("{courseId}")
-    public Course updateCourse(@PathVariable("courseId") Long courseId,@Valid @RequestBody Course course) {
-        return courseService.updateCourse(courseId,course);
+    public Course updateCourse(@PathVariable("courseId") Long courseId,@Valid @RequestBody CourseDto course) {
+        return courseService.updateCourse(courseId,courseDtoMapper.mapFrom(course));
     }
 
     @DeleteMapping("{courseId}")

@@ -3,7 +3,10 @@ package com.asimov.coursesservice.entity;
 import com.asimov.coursesservice.model.Teacher;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -12,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Data @AllArgsConstructor @Builder
 @Table(name = "courses")
 public class Course {
 
